@@ -18,9 +18,26 @@ We build a **human-assisted document classifier**: given the OCR text of a scann
 | # | Topic | Main notebook | Status |
 |---|---|---|---|
 | 0 | Baseline | [Baseline_01.ipynb](Baseline_01.ipynb) | done |
-| 1 | Active learning | [active_learning.ipynb](active_learning.ipynb) | in progress |
+| 1 | Active learning | [active_learning.ipynb](active_learning.ipynb) | done (submitted for Deliverable 1) |
 
-## Results so far (baseline)
+## Deliverable 1: Active learning
+
+**Main notebook:** [active_learning.ipynb](active_learning.ipynb)
+
+- **Setup:** 160 initial labels (20 per class), 10 rounds × 40 pages (budget 400 → 560 labels), simulated oracle, character n-gram TF-IDF + logistic regression, validation macro-F1, 5 seeds
+- **Strategies:** random, uncertainty (least confidence), diversity (farthest-first), representativeness (relative representativeness)
+
+| Strategy | Macro-F1 after 560 labels (mean ± std, 5 seeds) | Beats random (seeds) |
+|---|---|---|
+| Least confidence | 0.682 ± 0.017 | 4 / 5 |
+| Random | 0.671 ± 0.017 | – |
+| Farthest-first | 0.659 ± 0.023 | 2 / 5 |
+| Representative | 0.651 ± 0.026 | 2 / 5 |
+| *All 1,924 labels (reference)* | *0.726* | |
+
+**Conclusion:** uncertainty sampling is slightly better than random only late in the process, and the gain is within the run-to-run variability. Diversity and representative sampling are worse than random because they select pages with empty or very short OCR text. For this task, handling pages without usable text matters more than the acquisition strategy.
+
+## Baseline results
 
 | Model | Validation macro-F1 | Test macro-F1 |
 |---|---|---|
@@ -61,3 +78,6 @@ This creates `project_baselines/project_02/data/prepared/rvl_cdip_small_300/data
 ### 3. Notebooks
 
 Place the notebooks in `hsbi-hitl-2026/project_baselines/project_02/` and run them with the course kernel (Kernel → Restart and Run All).
+
+- `Baseline_01.ipynb`: data exploration, baseline evaluation, error analysis, character n-gram improvement
+- `active_learning.ipynb`: active-learning experiment (the full experiment with 5 seeds takes about 9 minutes on the cluster)
