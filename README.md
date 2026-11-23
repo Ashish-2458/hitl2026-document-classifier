@@ -20,6 +20,17 @@ We build a **human-assisted document classifier**: given the OCR text of a scann
 | 0 | Baseline | [Baseline_01.ipynb](Baseline_01.ipynb) | done |
 | 1 | Active learning | [active_learning.ipynb](active_learning.ipynb) | done (submitted for Deliverable 1) |
 
+## Repository structure
+
+```text
+hitl2026-document-classifier/
+├── README.md
+├── Baseline_01.ipynb          # baseline: exploration, evaluation, error analysis, improvement
+├── active_learning.ipynb      # Deliverable 1: active-learning experiment
+└── data/prepared/rvl_cdip_small_300/
+    └── dataset.csv            # OCR text, label and split of our 2,400 pages
+```
+
 ## Deliverable 1: Active learning
 
 **Main notebook:** [active_learning.ipynb](active_learning.ipynb)
@@ -49,21 +60,56 @@ Main findings: OCR text amount varies strongly by class; *presentation* is the w
 
 ## How to run
 
-The notebooks were run on the yourAI cluster using the course environment from the course repository [mbaezpy/hsbi-hitl-2026](https://github.com/mbaezpy/hsbi-hitl-2026).
+### Quick start: run the active-learning experiment (about 10 minutes)
 
-### 1. Environment
+This repository includes our prepared data (`data/prepared/rvl_cdip_small_300/dataset.csv`, 2.6 MB: OCR text, label and split of the 2,400 pages). The active-learning notebook only needs this file, so no dataset download and no OCR are required.
+
+**Requirements:** Python 3.10 or newer.
+
+```bash
+git clone https://github.com/Ashish-2458/hitl2026-document-classifier.git
+cd hitl2026-document-classifier
+pip install pandas scikit-learn matplotlib jupyter
+jupyter lab
+```
+
+Open `active_learning.ipynb` and run Kernel → Restart and Run All. The data is the same as ours; results should match closely (a different scikit-learn version may change the last decimals).
+
+### Full setup: recreate the data from scratch
+
+The baseline notebook also displays page images, which are not included here. To run it, or to recreate the data from scratch, follow the steps below.
+
+Our notebooks use the data-preparation script and the conda environment from the course repository [mbaezpy/hsbi-hitl-2026](https://github.com/mbaezpy/hsbi-hitl-2026). We ran everything on the yourAI cluster; the steps below also work on a local machine with Linux, macOS or Windows (WSL or Git Bash).
+
+**Requirements:** Git, Miniconda/Anaconda, Tesseract OCR, about 5 GB of free disk space.
+
+#### 1. Get both repositories
 
 ```bash
 git clone https://github.com/mbaezpy/hsbi-hitl-2026.git
+git clone https://github.com/Ashish-2458/hitl2026-document-classifier.git
+
+# copy our notebooks next to the project starter code
+cp hitl2026-document-classifier/*.ipynb hsbi-hitl-2026/project_baselines/project_02/
 cd hsbi-hitl-2026
-# use the course environment (on the cluster: module load miniconda3 && conda activate hitl-course)
-sudo apt-get install tesseract-ocr tesseract-ocr-eng   # OCR engine (already installed on the cluster)
+```
+
+#### 2. Environment
+
+```bash
+# creates the conda environment "hitl-course" and a Jupyter kernel "HITL Course"
+bash scripts/install_env.sh
+conda activate hitl-course
 python -m pip install pytesseract
 ```
 
-Main Python packages: pandas, scikit-learn, matplotlib, pillow, pytesseract.
+Install the Tesseract OCR engine (with English language data):
+- Ubuntu/Debian: `sudo apt-get install tesseract-ocr tesseract-ocr-eng`
+- macOS: `brew install tesseract`
+- Windows: installer from [UB Mannheim Tesseract](https://github.com/UB-Mannheim/tesseract/wiki), then add it to `PATH`
+- yourAI cluster: already installed (`module load miniconda3 && conda activate hitl-course`)
 
-### 2. Data (not included in this repository)
+#### 3. Data (full dataset and images, not included in this repository)
 
 ```bash
 # download the course copy of RVL-CDIP (40,000 pages)
@@ -75,9 +121,16 @@ python project_baselines/project_02/scripts/prepare_rvl_cdip_small.py --examples
 
 This creates `project_baselines/project_02/data/prepared/rvl_cdip_small_300/dataset.csv` (OCR text, label, split) and the page images.
 
-### 3. Notebooks
+#### 4. Run the notebooks
 
-Place the notebooks in `hsbi-hitl-2026/project_baselines/project_02/` and run them with the course kernel (Kernel → Restart and Run All).
+```bash
+cd project_baselines/project_02
+jupyter lab
+```
+
+Open the notebooks, select the kernel **HITL Course**, and run Kernel → Restart and Run All.
 
 - `Baseline_01.ipynb`: data exploration, baseline evaluation, error analysis, character n-gram improvement
-- `active_learning.ipynb`: active-learning experiment (the full experiment with 5 seeds takes about 9 minutes on the cluster)
+- `active_learning.ipynb`: active-learning experiment (5 seeds × 4 strategies, about 9 minutes on the cluster)
+
+**Note:** the sampling and the experiments use fixed seeds. A different Tesseract version can produce slightly different OCR text, so numbers may differ slightly from the outputs saved in the notebooks.
