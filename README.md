@@ -73,7 +73,11 @@ pip install pandas scikit-learn matplotlib jupyter
 jupyter lab
 ```
 
-Open `active_learning.ipynb` and run Kernel → Restart and Run All. The data is the same as ours; results should match closely (a different scikit-learn version may change the last decimals).
+Open `active_learning.ipynb` and follow these steps:
+
+> **⚠️ Kernel note:** The notebook was saved with the `hitl-course` conda kernel. If you are not using that environment, Jupyter Lab will raise `No such kernel named hitl-course`. Before running, go to **Kernel → Change Kernel → Python 3** to switch to your local kernel.
+
+Then run **Kernel → Restart and Run All**. The data is the same as ours; results should match closely (a different scikit-learn version may change the last decimals).
 
 ### Full setup: recreate the data from scratch
 
