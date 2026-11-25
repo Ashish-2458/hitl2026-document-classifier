@@ -60,11 +60,11 @@ Main findings: OCR text amount varies strongly by class; *presentation* is the w
 
 ## How to run
 
-### Quick start: run the active-learning experiment (about 10 minutes)
+The repository includes our prepared data (`data/prepared/rvl_cdip_small_300/dataset.csv`, 2.6 MB: OCR text, label and split of the 2,400 pages). The active-learning notebook only needs this file, so **no dataset download and no OCR are required**. It runs in about 10 minutes.
 
-This repository includes our prepared data (`data/prepared/rvl_cdip_small_300/dataset.csv`, 2.6 MB: OCR text, label and split of the 2,400 pages). The active-learning notebook only needs this file, so no dataset download and no OCR are required.
+### Run the active-learning notebook
 
-**Requirements:** Python 3.10 or newer.
+**Requirements:** Python 3.10 or newer, Git.
 
 ```bash
 git clone https://github.com/Ashish-2458/hitl2026-document-classifier.git
@@ -73,9 +73,14 @@ pip install pandas scikit-learn matplotlib jupyter
 jupyter lab
 ```
 
-Open `active_learning.ipynb` and run Kernel → Restart and Run All. The data is the same as ours; results should match closely (a different scikit-learn version may change the last decimals).
+Open `active_learning.ipynb` and run Kernel → Restart and Run All. The notebook was saved with our course kernel (`HITL Course`); if Jupyter asks for a kernel, choose **Python 3**.
 
-### Full setup: recreate the data from scratch
+### Notes on reproducibility
+
+- All sampling and experiments use fixed seeds (42–46).
+- The data is the same as ours, so the initial model, the first batches and random sampling reproduce exactly. With a different scikit-learn version, small numerical differences can change which pages the other strategies select in later rounds, so their final scores may differ by about ±0.01 (the conclusions stay the same).
+
+### Optional: recreate the data from scratch
 
 The baseline notebook also displays page images, which are not included here. To run it, or to recreate the data from scratch, follow the steps below.
 
